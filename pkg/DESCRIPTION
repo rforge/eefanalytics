@@ -2,8 +2,10 @@ Package: eefAnalytics
 Version: 1.0
 Date: 2015-11-25
 Title: Analytical Package for Analysing Education Trials
-Description:  Multilevel model or random effect model is an "omnibus" model that can be used to analyse multi-site trials, cluster randomised controlled trials and simple randomised trials across schools. The model reduces to ordinary linear regression when intra-cluster correlation is zero and it does not require equal cluster size or constant intervention effect across schools. The frequentist method relies on lme4 package and the implementation of Hedges'effect size based on unequal cluster size for 'within' and 'total' variance (Hedges, 2007). The Bayesian method relies on the packages geoR for scaled-inverse-Chi-square and mvtnorm for multivariate Normal distribution. The estimation are based on Gibb's sampling from the full conditional posterior distributions as discussed by Wang et al. (1993). To guarantee convergence of the mcmc chains, 50,000 iterations were specified for Gibb's sampling with the first 25,000 iterations discarded as 'burn-in' part. All parameters are based on vague priors and in most cases the results should be similar to the frequentist method.
-Author: Adetayo Kasim, ZhiMin Xiaa and Steve 
+Description:  This package provides tools for alanysing education trials. Making different accessible in a single place is essential for 
+sensitivity analysis of education trials, particulalry the implicatio of the different methods in analysing simple randomised trials,
+cluster randomised trials and multisite trials.
+Author: Adetayo Kasim, ZhiMin Xiao and Steve  Higgings
 Maintainer: Adetayo kasim <a.s.kasim@durham.ac.uk>
 Depends: R (>= 2.10)
 Imports: geoR, lme4, mvtnorm
