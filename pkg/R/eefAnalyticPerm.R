@@ -56,7 +56,7 @@ NULL
 #' @param formula specifies the model to be analysed. It is of the form y~x1+x2+..., 
 #' where y is the outcome variable and X's are the predictors.
 #' @param intervention the name of the intervention variable as appeared in formula.  
-#' This must be put in quotes.  For example "intervention" or "treatment" or "group".
+#' This must be put in quotes.  For example "ntervention" or "treatment" or "group".
 #' @param nBoot number of bootstrap required to generate bootstrap confidence interval. Default is NULL.
 #' @param nPerm number of permutations required to generate permutation p-value. Default  is NULL.
 #' @param data data frame containing the data to be analysed. 
@@ -145,7 +145,7 @@ srtFREQ.formula <- function(formula,intervention,nBoot=NULL,nPerm=NULL,data=data
 ############# CRT main functions ################################################
 #' Analysis of Cluster Randomised Trials using MLM.
 #' 
-#' \code{crtFREQ} is a frequentist method that can be used to calculate effect size from cluster randomised trials based on residual variance or total variance. .
+#' \code{crtFREQ} is a frequentist method that can be used to calculate effect size for cluster randomised trials based on residual variance or total variance.
 #' 
 #' @export
 #' @param formula specifies the model to be analysed. It is of the form form y ~ x1+x2 +..., 
@@ -153,7 +153,7 @@ srtFREQ.formula <- function(formula,intervention,nBoot=NULL,nPerm=NULL,data=data
 #' @param random a string variable specifying the "clustering" variable as contained in the data.
 #' This must be put between  quotes. For example, "school".
 #' @param intervention specifies the name of the intervention variable as appeared in formula.
-#' This must be put between quotes.  For example "intervention" or "treatment" or "group"..
+#' This must be put between quotes.  For example "intervention" or "treatment" or "group"...
 #' @param nBoot number of bootstrap required to generate bootstrap confidence interval. Default is NULL. 
 #' @param nPerm number of permutations required to generate permutation p-value. Default  is NULL.
 #' @param data the data frame to be analysed. 
@@ -257,15 +257,15 @@ crtFREQ.formula <- function(formula,random,intervention,nPerm=NULL,nBoot=NULL,da
 ############# MST main functions ################################################
 #' Analysis of Multisite Randomised Trials using MMLM.
 #' 
-#' \code{mstFREQ} implemented multilevel model for analysing randomised multisite trials with schools and school by intervention interactions specified as random effects
+#' \code{mstFREQ} performs multilevel model for analysing randomised multisite trials with schools and school by intervention interactions specified as random effects
 #' 
 #' @export
-#' @param formula specifies the model to be analysed. It is of the form form y ~ x1+x2 +...., 
+#' @param formula specifies the model to be analysed. It is of the form form y ~ x1+x2 +..., 
 #' where y is the outcome variable and X's are the predictors.
 #' @param random a string variable specifying the "clustering" variable as contained in the data.
 #' This must be put between  quotes. For example, "school".
 #' @param intervention specifies the name of the intervention variable as appeared in formula.
-#' This must be put between quotes.  For example "intervention" or "treatment" or "group"..
+#' This must be put between quotes.  For example "intervention" or "treatment" or "group"...
 #' @param nBoot number of bootstrap required to generate bootstrap confidence interval. Default is NULL. 
 #' @param nPerm number of permutations required to generate permutation p-value. Default  is NULL.
 #' @param data the data frame to be analysed. 
@@ -372,7 +372,7 @@ mstFREQ.formula <- function(formula,random,intervention,nPerm=NULL,data,nBoot=NU
 #' @param random a string variable specifying the "clustering" variable as contained in the data.
 #' This must be put between  quotes. For example, "school".
 #' @param intervention specifies the name of the intervention variable as appeared in formula.
-#' This must be put between quotes.  For example "intervention" or "treatment" or "group"..
+#' This must be put between quotes.  For example "intervention" or "treatment" or "group"...
 #' @param nSim number of MCMC simulations to generate samples from full conditional posterior distributions. 
 #' A minimum of 10,000 is recommended.
 #' @param data specifies data frame containing the data to be analysed. 
@@ -1156,10 +1156,11 @@ srt.srt<- function(posttest,fixedDesignMatrix,intervention,bt){
 ############# CRT main functions ################################################
 #' CACE Analysis of Cluster Randomised Trials using MLM.
 #' 
-#' \code{caceCRTBoot} performs CACE analysis of cluster randomised trials.
+#' \code{caceCRTBoot} performs CACE analysis of cluster randomised trials. 
+#' Intervention variable must be coded as dummy with multiple analysis for multi-arm trials. 
 #' 
 #' @export
-#' @param formula model specification of the form posttest ~ pretests+Intervention+....the model to be analysed. 
+#' @param formula specifies the model to be analysed.  
 #' It is of the form y~x1+x2+...,  where y is the outcome variable and X's are the predictors.
 #' @param intervention the name of the intervention variable as appeared in formula.  
 #' This must be put in quotes.  For example "intervention" or "treatment" or "group".
@@ -1314,9 +1315,10 @@ crt.cace <- function(posttest,fixedDesignMatrix,intervention,cluster){
 #' CACE Analysis of Multisite Randomised Trials.
 #' 
 #' \code{caceMSTBoot} performs CACE analysis of multisite randomised trials.
+#' Intervention variable must be coded as dummy with multiple analysis for multi-arm trials. 
 #' 
 #' @export
-#' @param formula model specification of the form posttest ~ pretests+Intervention+.... the model to be analysed. 
+#' @param formula specifies the model to be analysed.  
 #' It is of the form y~x1+x2+...,  where y is the outcome variable and X's are the predictors.
 #' @param intervention the name of the intervention variable as appeared in formula.  
 #' This must be put in quotes.  For example "intervention" or "treatment" or "group".
@@ -1334,7 +1336,7 @@ crt.cace <- function(posttest,fixedDesignMatrix,intervention,cluster){
 #' attended more than a pre-specified percentage of sessions. The values for the control group should be zeros if 
 #' there is no dilution in which a pupil or school in the control group receives intervention.
 #' }
-#' @example inst/examples/mstExample.R
+#' @example inst/examples/mstCACEExample.R
 
 caceMSTBoot <- function(formula,random,intervention,compliance,nBoot,data){
 
@@ -1491,11 +1493,11 @@ rbd.cace <- function(posttest,fixedDesignMatrix,intervention,trt,cluster){
 
 #' CACE Analysis of Simple Randomised Trials.
 #' 
-#' \code{caceSRTBoot} performs is used for CACE analysis of simple randomised trials. 
-#' Intervention variable must be coded as dummy with multiple analysis for multi-arms trials. 
+#' \code{caceSRTBoot} performs CACE analysis of simple randomised trials. 
+#' Intervention variable must be coded as dummy with multiple analysis for multi-arm trials. 
 #' 
 #' @export
-#' @param formula model specification of the form posttest ~ pretests+Intervention+....the model to be analysed. 
+#' @param formula specifies the model to be analysed. 
 #' It is of the form y~x1+x2+...,  where y is the outcome variable and X's are the predictors.
 #' @param intervention the name of the intervention variable as appeared in formula.  
 #' This must be put in quotes.  For example "intervention" or "treatment" or "group".

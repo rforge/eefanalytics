@@ -1,3 +1,5 @@
+data(catcht)
+
 
 ############# MST
 caceOutput2<- caceMSTBoot(Posttest~ Prettest+ Intervention,
