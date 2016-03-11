@@ -11,7 +11,7 @@ srtFREQ(formula, intervention, nBoot = NULL, nPerm = NULL, data)
 where y is the outcome variable and X's are the predictors.}
 
 \item{intervention}{the name of the intervention variable as appeared in formula.
-This must be put in quotes.  For example "ntervention" or "treatment" or "group".}
+This must be put in quotes.  For example "intervention" or "treatment" or "group".}
 
 \item{nBoot}{number of bootstrap required to generate bootstrap confidence interval. Default is NULL.}
 

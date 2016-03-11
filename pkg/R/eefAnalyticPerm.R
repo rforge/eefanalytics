@@ -56,7 +56,7 @@ NULL
 #' @param formula specifies the model to be analysed. It is of the form y~x1+x2+..., 
 #' where y is the outcome variable and X's are the predictors.
 #' @param intervention the name of the intervention variable as appeared in formula.  
-#' This must be put in quotes.  For example "ntervention" or "treatment" or "group".
+#' This must be put in quotes.  For example "intervention" or "treatment" or "group".
 #' @param nBoot number of bootstrap required to generate bootstrap confidence interval. Default is NULL.
 #' @param nPerm number of permutations required to generate permutation p-value. Default  is NULL.
 #' @param data data frame containing the data to be analysed. 
