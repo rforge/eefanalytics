@@ -1,0 +1,20 @@
+{
+    "collab_server" : "",
+    "contents" : "^.*\\.Rproj$\n^\\.Rproj\\.user$\n",
+    "created" : 1484010794256.000,
+    "dirty" : false,
+    "encoding" : "UTF-8",
+    "folds" : "",
+    "hash" : "2708567950",
+    "id" : "4D51A2DA",
+    "lastKnownWriteTime" : 1484010578,
+    "last_content_update" : 1484010578,
+    "path" : "~/StatFiles/CenStat/R Development/eefPackage/pkg/.Rbuildignore",
+    "project_path" : ".Rbuildignore",
+    "properties" : {
+    },
+    "relative_order" : 2,
+    "source_on_save" : false,
+    "source_window" : "",
+    "type" : "text"
+}
