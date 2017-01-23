@@ -59,19 +59,17 @@ NULL
 #' This can also be used with schools as fixed effects.
 #' 
 #' @export
-#' @param formula specifies the model to be analysed. It is of the form y~x1+x2+....
-#' Where y is the outcome variable and X?s are the predictors.
-#' @param intervention specification of the intervention variable as appeared in formula.  
-#' This must be put in quotes.  For example ?intervention? or ?treatment? or ?group?.
+#' @param formula the model to be analysed. It is of the form y~x1+x2+.... Where y is the outcome variable and Xs are the predictors.
+#' @param intervention a string variable specifying the "intervention variable" as appeared in the formula. See example below
 #' @param nBoot number of bootstraps required to generate bootstrap confidence interval. Default is NULL.
-#' @param nPerm number of permutations required to generate permutation p-value.  Default is NULL. 
+#' @param nPerm number of permutations required to generate permutated p-value.  Default is NULL.
 #' @param data data frame containing the data to be analysed. 
 #' @return S3 object; a list consisting of
 #' \itemize{
 #' \item \code{Beta}. Estimates and confidence intervals for the predictors specified in the model.
-#' \item \code{ES}. Hedges' g for the intervention effect. If nBoot is not specified, the confidence intervals are 95% CIs based on standard errors. If nBoot is specified, they are non-parametric bootstrapped confidence intervals.
+#' \item \code{ES}. Hedges' g effect size for the intervention(s). If nBoot is not specified, the confidence intervals are 95% CIs based on standard errors. If nBoot is specified, they are non-parametric bootstrapped confidence intervals.
 #' \item \code{sigma2}. Residual variance.
-#' \item \code{Perm}. A vector containing the distribution of effect sizes under the null hypothesis. It is produced only if \code{nPerm} is specified.
+#' \item \code{Perm}. A vector containing permutated effect sizes under null hypothesis. It is produced only if \code{nPerm} is specified.
 #' \item \code{Bootstrap}. A vector containing bootstrapped effect sizes. It is prduced only if \code{nBoot} is specified.
 #' }
 #' @example inst/examples/srtExample.R
@@ -156,20 +154,20 @@ srtFREQ.formula <- function(formula,intervention,nBoot=NULL,nPerm=NULL,data=data
 #' \code{crtFREQ} performs Analysis of cluster randomised education trial using multilevel model under the frequentist framework.
 #' 
 #' @export
-#' @param formula specifies the model to be analysed. It is of the form y ~ x1+x2+....
-#' @param random a string variable specifying the "clustering variable"  as contained in the data. 
-#' @param intervention a string variable specifying the intervention variable in the formula.
-#' @param nBoot specifies number of bootstrap samples for non-parametric bootstrap confidence interval. Default is NULL. 
-#' @param nPerm specifies number of perumation under the null hypothesis.  Default is NULL. 
-#' @param data specifies a data frame containing the data to be analysed. 
+#' @param formula the model to be analysed. It is of the form y ~ x1+x2+.... Where y is the outcome variable and Xs are the predictors.
+#' @param random a string variable specifying the "clustering variable" as contained in the data. See example below
+#' @param intervention a string variable specifying the "intervention variable" as appeared in the formula. See example below
+#' @param nBoot number of bootstraps required to generate bootstrap confidence interval. Default is NULL.
+#' @param nPerm number of permutations required to generate permutated p-value.  Default is NULL.
+#' @param data data frame containing the data to be analysed.
 #' @return S3 object; a list consisting of
 #' \itemize{
-#' \item \code{Beta}. The parameter estimates from multilevel model with their associated confidence intervals.
-#' \item \code{ES}. A matrix of  Hedges effect size based on within variance and total variance. It is base is based on standard error (SE) if \code{nBoot=NULL}. Otherwise, it is based on non-parametric bootstrap confidence intervals.
-#' \item \code{covParm}. Vector of variance decomposition into between-variance (Schools) and within-variance (Pupils).
-#' \item \code{SchEffects}. Estimated random intercepts for individual schools.
-#' \item \code{Perm}. A matrix containing the distribution of effect sizes under the null hypothesis. It is only produced when \code{nPerm} is specified. The first column contains effect sizes based on within variance and the second contains effect sizes based on total variance.
-#' \item \code{Bootstrap}. A matrix containing bootstrapped effect sizes. It is only prduced when \code{nBoot} is specified. The first column contains effect sizes based on within variance and the second one contains effect sizes based on total variance.
+#' \item \code{Beta}. Estimates and confidence intervals for preditors specified in the model.
+#' \item \code{ES}. Hedges' g effect size for the intervention(s). If nBoot is not specified, the confidence intervals are 95% CIs based on standard errors. If nBoot is specified, they are non-parametric bootstrapped confidence intervals.
+#' \item \code{covParm}. Vector of variance decomposition into between cluster variance (Schools) and within cluster variance (Pupils). It also contains the intral-cluster correlation (ICC).
+#' \item \code{SchEffects}. Random intercepts for clusters, e.g schools.
+#' \item \code{Perm}. A "nPerm x w" matrix containing permutated effect sizes using residual variance and total variance. "w" denotes number of intervention. "w=1" for two arm trial and "w=2" for three arm trial excluding the control group. It is produced only when \code{nPerm} is specified.
+#' \item \code{Bootstrap}. A "w x nBoot" matrix containing the bootstrapped effect sizes using residual variance (Within) and total variance (Total). "w=1" for two arm trial and "w=2" for three arm trial excluding the control group. It is only prduced when \code{nBoot} is specified.
 #' }
 #' @example inst/examples/crtExample.R
 crtFREQ<- function(formula,random,intervention,nPerm=NULL,nBoot=NULL,data)UseMethod("crtFREQ")
@@ -266,20 +264,20 @@ crtFREQ.formula <- function(formula,random,intervention,nPerm=NULL,nBoot=NULL,da
 #' \code{mstFREQ} performs analysis of multisite randomised education trial using multilevel model within the frequentist framework.
 #' 
 #' @export
-#' @param formula specifies the model to be analysed. It is of the form y ~ x1+x2+....
-#' @param random a string variable specifying the "clustering variable" as contained in the data. 
-#' @param intervention a string variable specifying the intervention variable in the formula.
-#' @param nBoot specifies number of bootstrap samples for non-parametric bootstrap confidence interval. Default is NULL. 
-#' @param nPerm specifies number of perumation under the null hypothesis.  Default is NULL. 
-#' @param data specifies a data frame containing the data to be analysed. 
+#' @param formula the model to be analysed. It is of the form y ~ x1+x2+.... Where y is the outcome variable and Xs are the predictors.
+#' @param random a string variable specifying the "clustering variable" as contained in the data. See example below
+#' @param intervention a string variable specifying the "intervention variable" as appeared in the formula. See example below
+#' @param nBoot number of bootstraps required to generate bootstrap confidence interval. Default is NULL.
+#' @param nPerm number of permutations required to generate permutated p-value.  Default is NULL.
+#' @param data data frame containing the data to be analysed.
 #' @return S3 object; a list consisting of
 #' \itemize{
-#' \item \code{Beta}. The parameter estimates from multilevel model with their associated confidence intervals.
-#' \item \code{ES}. A matrix of  Hedges' effect sizes based on within and total variances. It is based on standard errors (SE) if \code{nBoot=NULL}. Otherwise, it is non-parametric bootstrapped confidence intervals.
-#' \item \code{covParm}. Vector of variance decomposition into between-variance (Schools) and within-variance (Pupils).
-#' \item \code{SchEffects}. Estimated random intercepts for individual schools.
-#' \item \code{Perm}. A matrix containing the distribution of effect sizes under the null hypothesis. It is only produced if \code{nPerm} is specified. The first column contains effect sizes based on within variance and the second contains effect sizes based on total variance.
-#' \item \code{Bootstrap}. A matrix containing the bootstrapped effect sizes. It is only prduced when \code{nBoot} is specified. The first column contains effect sizes based on within variance and the second contains effect sizes based on total variance.
+#' \item \code{Beta}. Estimates and confidence intervals for preditors specified in the model.
+#' \item \code{ES}. Hedges' g effect size for the intervention(s). If nBoot is not specified, the confidence intervals are 95% CIs based on standard errors. If nBoot is specified, they are non-parametric bootstrapped confidence intervals.
+#' \item \code{covParm}. Vector of variance decomposition into between cluster variance (Schools), clustering by intervention interacttion (Intervention:School) and within cluster variance (Pupils). It also contains the intral-cluster correlation (ICC).
+#' \item \code{SchEffects}. Random intercepts for clusters, e.g schools.
+#' \item \code{Perm}. A "nPerm x w" matrix containing permutated effect sizes using residual variance and total variance. "w" denotes number of intervention. "w=1" for two arm trial and "w=2" for three arm trial excluding the control group. It is produced only when \code{nPerm} is specified.
+#' \item \code{Bootstrap}. A "w x nBoot" matrix containing the bootstrapped effect sizes using residual variance (Within) and total variance (Total). "w=1" for two arm trial and "w=2" for three arm trial excluding the control group. It is only prduced when \code{nBoot} is specified.
 #' }
 #' @example inst/examples/mstExample.R
 mstFREQ<- function(formula,random,intervention,nPerm=NULL,data,nBoot=NULL)UseMethod("mstFREQ")
@@ -370,19 +368,19 @@ mstFREQ.formula <- function(formula,random,intervention,nPerm=NULL,data,nBoot=NU
 #' assuming vague priors.
 #' 
 #' @export
-#' @param formula specifies the model to be analysed. It is of the form y ~ x1+x2+....
-#' @param random a string variable specifying the "cluster variable"  as contained in the data.
-#' @param intervention a string variable specifying the intervention variable in the formula.
-#' @param nSim specifies the number of MCMC iterations. A minimum of 10,000 is recommended.
+#' @param formula the model to be analysed. It is of the form y ~ x1+x2+.... Where y is the outcome variable and Xs are the predictors.
+#' @param random a string variable specifying the "clustering variable" as contained in the data. See example below
+#' @param intervention a string variable specifying the "intervention variable" as appeared in the formula. See example below
+#' @param nSim number of MCMC iterations. A minimum of 10,000 is recommended.
 #'
-#' @param data specifies a data frame to be analysed. 
+#' @param data data frame containing the data to be analysed.
 #' @return S3 object; a list consisting of
 #' \itemize{
-#' \item \code{Beta}. Parameter estimates from the linear model with associated confidence intervals.
-#' \item \code{ES}. A matrix of  Hedges' g based on within and total variances. It is based on standard errors (SE) if \code{nBoot=NULL}. Otherwise, it is non-parametric bootstrapped confidence intervals.
-#' \item \code{covParm}. Vector of variance decomposition into between-variance (Schools) and within-variance (Pupils).
-#' \item \code{SchEffects}. Estimated random intercepts for individual schools.
-#' \item \code{ProbES}. A maxtrix containing the probability of observing ES greater than a pre-specified value. First column is for within-variance, second for between-variance and the third for total-variance.
+#' \item \code{Beta}. Estimates and confidence intervals for preditors specified in the model.
+#' \item \code{ES}. Hedges' g effect size for the intervention(s). If nBoot is not specified, the confidence intervals are 95% CIs based on standard errors. If nBoot is specified, they are non-parametric bootstrapped confidence intervals.
+#' \item \code{covParm}. Vector of variance decomposition into between cluster variance (Schools) and within cluster variance (Pupils). It also contains the intral-cluster correlation (ICC).
+#' \item \code{SchEffects}. Random intercepts for clusters, e.g schools.
+#' \item \code{ProbES}. A maxtrix containing the probability of observing effect size greater than a pre-specified threshold. 
 #' }
 #' @example inst/examples/bayesExample.R
 mlmBayes <- function(formula,random,intervention,nSim,data)UseMethod("mlmBayes")
@@ -1164,15 +1162,15 @@ srt.srt<- function(posttest,fixedDesignMatrix,intervention,bt){
 #' \code{caceCRTBoot} performs exploratoty CACE analysis of cluster randomised education trials.
 #' 
 #' @export
-#' @param formula specifies the model to be analysed. It is of the form y ~ x1+x2+....
-#' @param random a string variable specifying the "cluster" as contained in the data. 
-#' @param intervention a string variable specifying the intervention variable in the formula.
-#' @param compliance a string variable specifying the "compliance variable" as contained in the data. The data must be in percentages ranging from 0 - 100. 
-#' @param nBoot specifies number of bootstrap samples for non-parametric bootstrap confidence interval. Default is NULL.
-#' @param data a data frame containing the data to be analysed. 
+#' @param formula the model to be analysed. It is of the form y ~ x1+x2+.... Where y is the outcome variable and Xs are the predictors.
+#' @param random a string variable specifying the "clustering variable" as contained in the data. See example below
+#' @param intervention a string variable specifying the "intervention variable" as appeared in the formula. See example below
+#' @param compliance a string variable specifying the "compliance variable" as contained in the data.  The data must be in percentages ranging from 0 - 100.
+#' @param nBoot number of bootstraps required to generate bootstrap confidence interval. Default is NULL.
+#' @param data data frame containing the data to be analysed. 
 #' @return S3 object; a list consisting of
 #' \itemize{
-#' \item \code{CACE}. Estimates of CACE adjusted effect sizes based on pre-specified thresholds. Only produced for threshhold with atleast 50% compliance rate.
+#' \item \code{CACE}. Estimates of CACE adjusted effect sizes based on pre-specified thresholds. Only produced for threshold with at least 50% compliance rate.
 #' \item \code{Compliers}. Percentage of pupils that achieved a pre-specified threshold of compliance.
 #' }
 #' @example inst/examples/crtCACEExample.R
@@ -1373,15 +1371,15 @@ crt.cace <- function(posttest,fixedDesignMatrix,intervention,cluster){
 #' \code{caceMSTBoot} performs exploratory CACE analysis of multisite randomised education trials.
 #' 
 #' @export
-#' @param formula specifies the model to be analysed. It is of the form y ~ x1+x2+....
-#' @param random a string variable specifying the "cluster variable" as contained in the data. 
-#' @param intervention a string variable specifying the intervention variable in the formula.
-#' @param compliance a string variable specifying the "compliance variable" as contained in the data. The data must be in percentages ranging from 0 - 100. 
-#' @param nBoot specifies number of bootstrap samples for non-parametric bootstrap confidence interval. Default is NULL. 
-#' @param data a data frame containing the data to be analysed. 
+#' @param formula the model to be analysed. It is of the form y ~ x1+x2+.... Where y is the outcome variable and Xs are the predictors.
+#' @param random a string variable specifying the "clustering variable" as contained in the data. See example below 
+#' @param intervention a string variable specifying the "intervention variable" as appeared in the formula. See example below
+#' @param compliance a string variable specifying the "compliance variable" as contained in the data. The data must be in percentages ranging from 0 - 100.
+#' @param nBoot number of bootstraps required to generate bootstrap confidence interval. Default is NULL.
+#' @param data data frame containing the data to be analysed.
 #' @return S3 object; a list consisting of
 #' \itemize{
-#' \item \code{CACE}. Estimates of CACE adjusted effect sizes based on pre-specified thresholds. Only produced for threshhold with atleast 50% compliance rate.
+#' \item \code{CACE}. Estimates of CACE adjusted effect sizes based on pre-specified thresholds. Only produced for threshold with at least 50% compliance rate.
 #' \item \code{Compliers}. Percentage of pupils that achieved a pre-specified threshold of compliance.
 #' }
 #' @example inst/examples/mstExample.R
@@ -1606,15 +1604,15 @@ rbd.cace <- function(posttest,fixedDesignMatrix,intervention,trt,cluster){
 #' \code{caceSRTBoot} performs exploraty CACE analysis of simple randomised education trials.
 #' 
 #' @export
-#' @param formula specifies the model to be analysed. It is of the form y ~ x1+x2+....
-#' @param intervention a string variable specifying the intervention variable in the formula.
-#' @param compliance a string variable specifying the "compliance variable" as contained in the data. The data must be in percentages ranging from 0 - 100. 
+#' @param formula the model to be analysed. It is of the form y ~ x1+x2+.... Where y is the outcome variable and Xs are the predictors.
+#' @param intervention a string variable specifying the "intervention variable" as appeared in the formula. See example below
+#' @param compliance a string variable specifying the "compliance variable" as contained in the data.  The data must be in percentages ranging from 0 - 100.
 #' @param nBoot number of non-parametric bootstraps.  Default is NULL. 
-#' @param data a data frame containing the data to be analysed. 
+#' @param data data frame containing the data to be analysed.
 #' @return S3 \code{mcpi} object; a list consisting of
 #' \itemize{
-#' \item \code{CACE}. Estimates of CACE adjusted effect sizes based on pre-specified thresholds. Only produced for threshhold with atleast 50% compliance rate.
-#' \item \code{Compliers}.Percentage of pupils that achieved a pre-specified threshold of compliance.
+#' \item \code{CACE}. Estimates of CACE adjusted effect sizes based on pre-specified thresholds. Only produced for threshold with atleast 50% compliance rate.
+#' \item \code{Compliers} Percentage of pupils that achieved a pre-specified threshold of compliance.
 #' }
 #' @example inst/examples/srtCACEExample.R
 caceSRTBoot <- function(formula,intervention,compliance,nBoot,data){UseMethod("caceSRTBoot")}

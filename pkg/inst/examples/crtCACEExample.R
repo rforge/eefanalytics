@@ -1,7 +1,8 @@
 if(interactive()){
 
 data(crtData)
-############# CRT
+
+######################## weighted ITT ##############################################
 caceOutput<- caceCRTBoot(Posttest~ Prettest+ Intervention,
 			random="School",intervention="Intervention",
 			compliance = "Percentage_Attendance",nBoot=1000,data=crtData)
@@ -14,6 +15,5 @@ Complier
 
 ### visualising CACE effect size
 
-plotObject(analyticObject=ccaceOutput)
-
+plot(caceOutput)
 }

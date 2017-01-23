@@ -15,7 +15,7 @@ beta <- output1$Beta
 beta
 
 ### Effect size
-ES1 <- output1$ES$Intervention1
+ES1 <- output1$ES
 ES1
 
 ## Covariance matrix
@@ -24,7 +24,7 @@ covParm
 
 ### plot random effects for schools
 
-plotObject(analyticObject=output1)
+plot(output1)
 
 ###############################################
 ## MLM analysis of cluster randomised trials ##	 
@@ -42,7 +42,7 @@ ES2
 
 ### plot bootstrapped values
 
-plotObject(analyticObject=output2, group=1)
+plot(output2, group=1)
 
 #######################################################################
 ## MLM analysis of cluster randomised trials with permutation p-value##
@@ -51,17 +51,13 @@ plotObject(analyticObject=output2, group=1)
 output3 <- crtFREQ(Posttest~ Intervention+Prettest,random="School",
 		intervention="Intervention",nPerm=1000,data=crtData)
 
+### Effect size
 
-#### Distribution under the null
-
-perm <- output3$Perm
+ES3 <- output3$ES
+ES3
 
 
 ### plot permutated values
 
-plotObject(analyticObject=output3, group=1)
-
-
+plot(output3, group=1)
 }
-
-

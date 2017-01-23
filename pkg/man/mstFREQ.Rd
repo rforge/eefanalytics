@@ -7,27 +7,27 @@
 mstFREQ(formula, random, intervention, nPerm = NULL, data, nBoot = NULL)
 }
 \arguments{
-\item{formula}{specifies the model to be analysed. It is of the form y ~ x1+x2+....}
+\item{formula}{the model to be analysed. It is of the form y ~ x1+x2+.... Where y is the outcome variable and Xs are the predictors.}
 
-\item{random}{a string variable specifying the "clustering variable" as contained in the data.}
+\item{random}{a string variable specifying the "clustering variable" as contained in the data. See example below}
 
-\item{intervention}{a string variable specifying the intervention variable in the formula.}
+\item{intervention}{a string variable specifying the "intervention variable" as appeared in the formula. See example below}
 
-\item{nPerm}{specifies number of perumation under the null hypothesis.  Default is NULL.}
+\item{nPerm}{number of permutations required to generate permutated p-value.  Default is NULL.}
 
-\item{data}{specifies a data frame containing the data to be analysed.}
+\item{data}{data frame containing the data to be analysed.}
 
-\item{nBoot}{specifies number of bootstrap samples for non-parametric bootstrap confidence interval. Default is NULL.}
+\item{nBoot}{number of bootstraps required to generate bootstrap confidence interval. Default is NULL.}
 }
 \value{
 S3 object; a list consisting of
 \itemize{
-\item \code{Beta}. The parameter estimates from multilevel model with their associated confidence intervals.
-\item \code{ES}. A matrix of  Hedges' effect sizes based on within and total variances. It is based on standard errors (SE) if \code{nBoot=NULL}. Otherwise, it is non-parametric bootstrapped confidence intervals.
-\item \code{covParm}. Vector of variance decomposition into between-variance (Schools) and within-variance (Pupils).
-\item \code{SchEffects}. Estimated random intercepts for individual schools.
-\item \code{Perm}. A matrix containing the distribution of effect sizes under the null hypothesis. It is only produced if \code{nPerm} is specified. The first column contains effect sizes based on within variance and the second contains effect sizes based on total variance.
-\item \code{Bootstrap}. A matrix containing the bootstrapped effect sizes. It is only prduced when \code{nBoot} is specified. The first column contains effect sizes based on within variance and the second contains effect sizes based on total variance.
+\item \code{Beta}. Estimates and confidence intervals for preditors specified in the model.
+\item \code{ES}. Hedges' g effect size for the intervention(s). If nBoot is not specified, the confidence intervals are 95% CIs based on standard errors. If nBoot is specified, they are non-parametric bootstrapped confidence intervals.
+\item \code{covParm}. Vector of variance decomposition into between cluster variance (Schools), clustering by intervention interacttion (Intervention:School) and within cluster variance (Pupils). It also contains the intral-cluster correlation (ICC).
+\item \code{SchEffects}. Random intercepts for clusters, e.g schools.
+\item \code{Perm}. A "nPerm x w" matrix containing permutated effect sizes using residual variance and total variance. "w" denotes number of intervention. "w=1" for two arm trial and "w=2" for three arm trial excluding the control group. It is produced only when \code{nPerm} is specified.
+\item \code{Bootstrap}. A "w x nBoot" matrix containing the bootstrapped effect sizes using residual variance (Within) and total variance (Total). "w=1" for two arm trial and "w=2" for three arm trial excluding the control group. It is only prduced when \code{nBoot} is specified.
 }
 }
 \description{
@@ -51,7 +51,7 @@ beta <- output1$Beta
 beta
 
 ### Effect size
-ES1 <- output1$ES$Intervention1
+ES1 <- output1$ES
 ES1
 
 ## Covariance matrix
@@ -60,7 +60,7 @@ covParm
 
 ### plot random effects for schools
 
-plotObject(analyticObject=output1)
+plot(output1)
 
 ###############################################
 ## MLM analysis of multisite trials          ##	 
@@ -70,7 +70,7 @@ plotObject(analyticObject=output1)
 output2 <- mstFREQ(Posttest~ Intervention+Prettest,random="School",
 		intervention="Intervention",nBoot=1000,data=mstData)
 
-
+tp <- output2$Bootstrap
 ### Effect size
 
 ES2 <- output2$ES
@@ -78,7 +78,7 @@ ES2
 
 ### plot bootstrapped values 
 
-plotObject(analyticObject=output2, group=1)
+plot(output2, group=1)
 
 #######################################################################
 ## MLM analysis of mutltisite trials with permutation p-value##
@@ -87,14 +87,12 @@ plotObject(analyticObject=output2, group=1)
 output3 <- mstFREQ(Posttest~ Intervention+Prettest,random="School",
 		intervention="Intervention",nPerm=1000,data=mstData)
 
+ES3 <- output3$ES
+ES3
 
 #### plot permutated values 
 
-plotObject(analyticObject=output3, group=1)
-
-
+plot(output3, group=1)
 }
-
-
 }
 

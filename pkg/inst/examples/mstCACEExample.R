@@ -1,20 +1,20 @@
 if(interactive()){
-
+  
 data(mstData)
-############# MST
-caceOutput2<- caceMSTBoot(Posttest~ Prettest+ Intervention,
-			random="School",intervention="Intervention",compliance = "Percentage_Attendance",nBoot=1000,data=mstData)
 
-cace <- caceOutput2$CACE
+######################## weighted ITT ##############################################
+
+caceOutput<- caceMSTBoot(Posttest~ Prettest+ Intervention,
+			random="School",intervention="Intervention",
+			compliance = "Percentage_Attendance",nBoot=1000,data=mstData)
+
+cace <- caceOutput$CACE
 cace
 
-Complier <- caceOutput2$Compliers
+Complier <- caceOutput$Compliers
 Complier 
 
 ### visualising CACE effect size
 
-plotObject(analyticObject=caceOutput2)
-
-
+plot(caceOutput)
 }
-

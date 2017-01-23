@@ -9,6 +9,7 @@ data(mstData)
 output1 <- srtFREQ(Posttest~ Intervention+Prettest,
 		intervention="Intervention",data=mstData )
 ES1 <- output1$ES
+ES1
 
 ###################################################################
 ## Analysis of simple randomised trials using Hedges Effect Size ## 
@@ -17,45 +18,49 @@ ES1 <- output1$ES
 
 output2 <- srtFREQ(Posttest~ Intervention+Prettest,
 		intervention="Intervention",nPerm=1000,data=mstData )
+
 ES2 <- output2$ES
-
-
+ES2
 
 
 #### plot permutated values
 
-plotObject(analyticObject=output2, group=1)
+plot(output2, group=1)
 
 
 
 ###################################################################
 ## Analysis of simple randomised trials using Hedges Effect Size ##
-## with non-parametric bootstrap CI                              ##
+## with non-parametric bootstrap confidence intervals            ##
 ###################################################################
 
 output3 <- srtFREQ(Posttest~ Intervention+Prettest,
 		intervention="Intervention",nBoot=1000,data=mstData)
+
 ES3 <- output3$ES
+ES3
 
 ### plot bootstrapped values
 
-plotObject(analyticObject=output3, group=1)
+plot(output3, group=1)
 
 ####################################################################
-## Analysis of simple randomised trials using Hedges Effect Size. ##
-## Schools as fixed effects                                       ##
+## Analysis of simple randomised trials using Hedges' effect size  ##
+##  with schools as fixed effects                                  ##
 ####################################################################
 
 output4 <- srtFREQ(Posttest~ Intervention+Prettest+as.factor(School),
 		intervention="Intervention",data=mstData )
+
 ES4 <- output4$ES
+ES4
 
-###################################################################
-## Analysis of simple randomised trials using Hedges Effect Size ##
-## with Permutation p-value. Schools as fixed effects            ##
-###################################################################
+####################################################################
+## Analysis of simple randomised trials using Hedges' effect size ##
+## with schools as fixed effects and with permutation p-value     ##
+####################################################################
 
-output5 <- srtFREQ(Posttest~ Intervention+Prettest,
+output5 <- srtFREQ(Posttest~ Intervention+Prettest+as.factor(School),
 		intervention="Intervention",nPerm=1000,data=mstData )
 
 ES5 <- output5$ES
@@ -63,20 +68,20 @@ ES5
 
 #### plot permutated values
 
-plotObject(analyticObject=output5, group=1)
+plot(output5, group=1)
 
 ####################################################################
-## Analysis of simple randomised trials using Hedges Effect Size  ##
-## with non-parametric bootstrap CI. Schools as fixed effects     ##
+## Analysis of simple randomised trials using Hedges' effect size ##
+## with schools as fixed effects and with permutation p-value      ##
 ####################################################################
 
-output6 <- srtFREQ(Posttest~ Intervention+Prettest,
+output6 <- srtFREQ(Posttest~ Intervention+Prettest+as.factor(School),
 		intervention="Intervention",nBoot=1000,data=mstData)
+
 ES6 <- output6$ES
 ES6 
 
 ### plot bootstrapped values
 
-plotObject(analyticObject=output6, group=1)
-
+plot(output6, group=1)
 }

@@ -15,7 +15,7 @@ beta <- output1$Beta
 beta
 
 ### Effect size
-ES1 <- output1$ES$Intervention1
+ES1 <- output1$ES
 ES1
 
 ## Covariance matrix
@@ -24,7 +24,7 @@ covParm
 
 ### plot random effects for schools
 
-plotObject(analyticObject=output1)
+plot(output1)
 
 ###############################################
 ## MLM analysis of multisite trials          ##	 
@@ -34,7 +34,7 @@ plotObject(analyticObject=output1)
 output2 <- mstFREQ(Posttest~ Intervention+Prettest,random="School",
 		intervention="Intervention",nBoot=1000,data=mstData)
 
-
+tp <- output2$Bootstrap
 ### Effect size
 
 ES2 <- output2$ES
@@ -42,7 +42,7 @@ ES2
 
 ### plot bootstrapped values 
 
-plotObject(analyticObject=output2, group=1)
+plot(output2, group=1)
 
 #######################################################################
 ## MLM analysis of mutltisite trials with permutation p-value##
@@ -51,12 +51,10 @@ plotObject(analyticObject=output2, group=1)
 output3 <- mstFREQ(Posttest~ Intervention+Prettest,random="School",
 		intervention="Intervention",nPerm=1000,data=mstData)
 
+ES3 <- output3$ES
+ES3
 
 #### plot permutated values 
 
-plotObject(analyticObject=output3, group=1)
-
-
+plot(output3, group=1)
 }
-
-

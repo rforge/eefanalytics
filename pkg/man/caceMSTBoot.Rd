@@ -7,22 +7,22 @@
 caceMSTBoot(formula, random, intervention, compliance, nBoot, data)
 }
 \arguments{
-\item{formula}{specifies the model to be analysed. It is of the form y ~ x1+x2+....}
+\item{formula}{the model to be analysed. It is of the form y ~ x1+x2+.... Where y is the outcome variable and Xs are the predictors.}
 
-\item{random}{a string variable specifying the "cluster variable" as contained in the data.}
+\item{random}{a string variable specifying the "clustering variable" as contained in the data. See example below}
 
-\item{intervention}{a string variable specifying the intervention variable in the formula.}
+\item{intervention}{a string variable specifying the "intervention variable" as appeared in the formula. See example below}
 
 \item{compliance}{a string variable specifying the "compliance variable" as contained in the data. The data must be in percentages ranging from 0 - 100.}
 
-\item{nBoot}{specifies number of bootstrap samples for non-parametric bootstrap confidence interval. Default is NULL.}
+\item{nBoot}{number of bootstraps required to generate bootstrap confidence interval. Default is NULL.}
 
-\item{data}{a data frame containing the data to be analysed.}
+\item{data}{data frame containing the data to be analysed.}
 }
 \value{
 S3 object; a list consisting of
 \itemize{
-\item \code{CACE}. Estimates of CACE adjusted effect sizes based on pre-specified thresholds. Only produced for threshhold with atleast 50% compliance rate.
+\item \code{CACE}. Estimates of CACE adjusted effect sizes based on pre-specified thresholds. Only produced for threshold with at least 50% compliance rate.
 \item \code{Compliers}. Percentage of pupils that achieved a pre-specified threshold of compliance.
 }
 }
@@ -47,7 +47,7 @@ beta <- output1$Beta
 beta
 
 ### Effect size
-ES1 <- output1$ES$Intervention1
+ES1 <- output1$ES
 ES1
 
 ## Covariance matrix
@@ -56,7 +56,7 @@ covParm
 
 ### plot random effects for schools
 
-plotObject(analyticObject=output1)
+plot(output1)
 
 ###############################################
 ## MLM analysis of multisite trials          ##	 
@@ -66,7 +66,7 @@ plotObject(analyticObject=output1)
 output2 <- mstFREQ(Posttest~ Intervention+Prettest,random="School",
 		intervention="Intervention",nBoot=1000,data=mstData)
 
-
+tp <- output2$Bootstrap
 ### Effect size
 
 ES2 <- output2$ES
@@ -74,7 +74,7 @@ ES2
 
 ### plot bootstrapped values 
 
-plotObject(analyticObject=output2, group=1)
+plot(output2, group=1)
 
 #######################################################################
 ## MLM analysis of mutltisite trials with permutation p-value##
@@ -83,14 +83,12 @@ plotObject(analyticObject=output2, group=1)
 output3 <- mstFREQ(Posttest~ Intervention+Prettest,random="School",
 		intervention="Intervention",nPerm=1000,data=mstData)
 
+ES3 <- output3$ES
+ES3
 
 #### plot permutated values 
 
-plotObject(analyticObject=output3, group=1)
-
-
+plot(output3, group=1)
 }
-
-
 }
 

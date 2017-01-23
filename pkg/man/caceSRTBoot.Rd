@@ -7,21 +7,21 @@
 caceSRTBoot(formula, intervention, compliance, nBoot, data)
 }
 \arguments{
-\item{formula}{specifies the model to be analysed. It is of the form y ~ x1+x2+....}
+\item{formula}{the model to be analysed. It is of the form y ~ x1+x2+.... Where y is the outcome variable and Xs are the predictors.}
 
-\item{intervention}{a string variable specifying the intervention variable in the formula.}
+\item{intervention}{a string variable specifying the "intervention variable" as appeared in the formula. See example below}
 
-\item{compliance}{a string variable specifying the "compliance variable" as contained in the data. The data must be in percentages ranging from 0 - 100.}
+\item{compliance}{a string variable specifying the "compliance variable" as contained in the data.  The data must be in percentages ranging from 0 - 100.}
 
 \item{nBoot}{number of non-parametric bootstraps.  Default is NULL.}
 
-\item{data}{a data frame containing the data to be analysed.}
+\item{data}{data frame containing the data to be analysed.}
 }
 \value{
 S3 \code{mcpi} object; a list consisting of
 \itemize{
-\item \code{CACE}. Estimates of CACE adjusted effect sizes based on pre-specified thresholds. Only produced for threshhold with atleast 50% compliance rate.
-\item \code{Compliers}.Percentage of pupils that achieved a pre-specified threshold of compliance.
+\item \code{CACE}. Estimates of CACE adjusted effect sizes based on pre-specified thresholds. Only produced for threshold with atleast 50% compliance rate.
+\item \code{Compliers} Percentage of pupils that achieved a pre-specified threshold of compliance.
 }
 }
 \description{
@@ -31,7 +31,7 @@ S3 \code{mcpi} object; a list consisting of
 if(interactive()){
 
 data(mstData)
-############# SRT
+############# weighted ITT ####################################
 caceOutput3<- caceSRTBoot(Posttest~ Prettest+ Intervention,
 			intervention="Intervention",
 			compliance = "Percentage_Attendance",nBoot=1000,data=mstData)
@@ -44,8 +44,7 @@ Complier
 
 ### visualising CACE effect size
 
-plotObject(analyticObject=ccaceOutput3)
-
+plot(caceOutput3)
 }
 }
 

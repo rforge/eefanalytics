@@ -7,15 +7,13 @@
 srtFREQ(formula, intervention, nBoot = NULL, nPerm = NULL, data)
 }
 \arguments{
-\item{formula}{specifies the model to be analysed. It is of the form y~x1+x2+....
-Where y is the outcome variable and X?s are the predictors.}
+\item{formula}{the model to be analysed. It is of the form y~x1+x2+.... Where y is the outcome variable and Xs are the predictors.}
 
-\item{intervention}{specification of the intervention variable as appeared in formula.
-This must be put in quotes.  For example ?intervention? or ?treatment? or ?group?.}
+\item{intervention}{a string variable specifying the "intervention variable" as appeared in the formula. See example below}
 
 \item{nBoot}{number of bootstraps required to generate bootstrap confidence interval. Default is NULL.}
 
-\item{nPerm}{number of permutations required to generate permutation p-value.  Default is NULL.}
+\item{nPerm}{number of permutations required to generate permutated p-value.  Default is NULL.}
 
 \item{data}{data frame containing the data to be analysed.}
 }
@@ -23,9 +21,9 @@ This must be put in quotes.  For example ?intervention? or ?treatment? or ?group
 S3 object; a list consisting of
 \itemize{
 \item \code{Beta}. Estimates and confidence intervals for the predictors specified in the model.
-\item \code{ES}. Hedges' g for the intervention effect. If nBoot is not specified, the confidence intervals are 95% CIs based on standard errors. If nBoot is specified, they are non-parametric bootstrapped confidence intervals.
+\item \code{ES}. Hedges' g effect size for the intervention(s). If nBoot is not specified, the confidence intervals are 95% CIs based on standard errors. If nBoot is specified, they are non-parametric bootstrapped confidence intervals.
 \item \code{sigma2}. Residual variance.
-\item \code{Perm}. A vector containing the distribution of effect sizes under the null hypothesis. It is produced only if \code{nPerm} is specified.
+\item \code{Perm}. A vector containing permutated effect sizes under null hypothesis. It is produced only if \code{nPerm} is specified.
 \item \code{Bootstrap}. A vector containing bootstrapped effect sizes. It is prduced only if \code{nBoot} is specified.
 }
 }
@@ -45,6 +43,7 @@ data(mstData)
 output1 <- srtFREQ(Posttest~ Intervention+Prettest,
 		intervention="Intervention",data=mstData )
 ES1 <- output1$ES
+ES1
 
 ###################################################################
 ## Analysis of simple randomised trials using Hedges Effect Size ## 
@@ -53,45 +52,49 @@ ES1 <- output1$ES
 
 output2 <- srtFREQ(Posttest~ Intervention+Prettest,
 		intervention="Intervention",nPerm=1000,data=mstData )
+
 ES2 <- output2$ES
-
-
+ES2
 
 
 #### plot permutated values
 
-plotObject(analyticObject=output2, group=1)
+plot(output2, group=1)
 
 
 
 ###################################################################
 ## Analysis of simple randomised trials using Hedges Effect Size ##
-## with non-parametric bootstrap CI                              ##
+## with non-parametric bootstrap confidence intervals            ##
 ###################################################################
 
 output3 <- srtFREQ(Posttest~ Intervention+Prettest,
 		intervention="Intervention",nBoot=1000,data=mstData)
+
 ES3 <- output3$ES
+ES3
 
 ### plot bootstrapped values
 
-plotObject(analyticObject=output3, group=1)
+plot(output3, group=1)
 
 ####################################################################
-## Analysis of simple randomised trials using Hedges Effect Size. ##
-## Schools as fixed effects                                       ##
+## Analysis of simple randomised trials using Hedges' effect size  ##
+##  with schools as fixed effects                                  ##
 ####################################################################
 
 output4 <- srtFREQ(Posttest~ Intervention+Prettest+as.factor(School),
 		intervention="Intervention",data=mstData )
+
 ES4 <- output4$ES
+ES4
 
-###################################################################
-## Analysis of simple randomised trials using Hedges Effect Size ##
-## with Permutation p-value. Schools as fixed effects            ##
-###################################################################
+####################################################################
+## Analysis of simple randomised trials using Hedges' effect size ##
+## with schools as fixed effects and with permutation p-value     ##
+####################################################################
 
-output5 <- srtFREQ(Posttest~ Intervention+Prettest,
+output5 <- srtFREQ(Posttest~ Intervention+Prettest+as.factor(School),
 		intervention="Intervention",nPerm=1000,data=mstData )
 
 ES5 <- output5$ES
@@ -99,22 +102,22 @@ ES5
 
 #### plot permutated values
 
-plotObject(analyticObject=output5, group=1)
+plot(output5, group=1)
 
 ####################################################################
-## Analysis of simple randomised trials using Hedges Effect Size  ##
-## with non-parametric bootstrap CI. Schools as fixed effects     ##
+## Analysis of simple randomised trials using Hedges' effect size ##
+## with schools as fixed effects and with permutation p-value      ##
 ####################################################################
 
-output6 <- srtFREQ(Posttest~ Intervention+Prettest,
+output6 <- srtFREQ(Posttest~ Intervention+Prettest+as.factor(School),
 		intervention="Intervention",nBoot=1000,data=mstData)
+
 ES6 <- output6$ES
 ES6 
 
 ### plot bootstrapped values
 
-plotObject(analyticObject=output6, group=1)
-
+plot(output6, group=1)
 }
 }
 

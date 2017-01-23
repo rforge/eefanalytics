@@ -10,7 +10,7 @@
 \item{x}{an output object from the eefAnalytics package.}
 
 \item{group}{a value indicating which intervention to plot.
-This must be not be greater than the number of intervention excluing the control group.
+This must not be greater than the number of intervention excluding the control group.
 For a two arm trial, the maximum value is 1 and a maximum value of 2 for three arm trial.}
 
 \item{...}{arguments passed to \code{\link[graphics]{plot.default}}}
@@ -22,7 +22,16 @@ Returns relevant plots for each model.
 plots different figures based on output from eefAnalytics package.
 }
 \details{
-PUT IN MORE DETAILS WHICH PLOT IS GIVEN UNDER WHICH CONDITION (SRT,MST,...)
+Plot produces graphical visualisation depending on which model is fitted:
+\itemize{
+\item For \code{srtFREQ()}, plot can only be used when \code{nBoot} or \code{nPerm} is specified to visualise the distribution of boostrapped or permutated values. 
+\item For \code{crtFREQ()} or \code{mstFREQ}, plot shows the distribution of random intercepts when \code{group=NULL}. 
+It produces histogram of permutated or bootstrapped values when \code{group} is specified and either \code{nBoot} or \code{nPerm} is also specified. 
+\item For \code{mlmBayes()}, plot produces the distrbution of random intercepts when \code{group = NULL}. 
+It produces the probability of effect size to be greater than a pre-specified threshold when group is specified. 
+\item Lastly, plot produces forest plots to compare CACE estimated for different level of compliance when \code{caceSRTBoot()} or 
+\code{caceCRTBoot()} or \code{caceMSTBoot()} is used.
+}
 }
 \examples{
 if(interactive()){
@@ -36,61 +45,39 @@ data(crtData)
 ##### SRT #####
 ###############
 
-##### Two arm study 
-outputSRT <- srtFREQ(Posttest~ Intervention + Prettest,
-                     intervention = "Intervention", data = mstData)
-# plot(outputSRT)
-
+##### Bootstrapped
 
 outputSRTBoot <- srtFREQ(Posttest~ Intervention + Prettest,
                          intervention = "Intervention",nBoot=1000, data = mstData)
-# plot(outputSRTBoot)
 plot(outputSRTBoot,group=1)
 
-
+##### Permutation
 outputSRTPerm <- srtFREQ(Posttest~ Intervention + Prettest,
                          intervention = "Intervention",nPerm=1000, data = mstData)
-# plot(outputSRTPerm)
+
 plot(outputSRTPerm,group=1)
 
-
-##### Three arm study 
-outputSRT2 <- srtFREQ(Posttest~ Intervention2 + Prettest,
-                      intervention = "Intervention2", data = mstData)
-# plot(outputSRT2)
-
-
-outputSRTBoot2 <- srtFREQ(Posttest~ Intervention2 + Prettest,
-                          intervention = "Intervention2",nBoot=1000, data = mstData)
-# plot(outputSRTBoot2)
-plot(outputSRTBoot2,group=1)
-plot(outputSRTBoot2,group=2)
-
-
-outputSRTPerm2 <- srtFREQ(Posttest~ Intervention2 + Prettest,
-                          intervention = "Intervention2",nPerm=1000, data = mstData)
-# plot(outputSRTPerm2)
-plot(outputSRTPerm2,group=1)
-plot(outputSRTPerm2,group=2)
 
 ###############
 ##### MST #####
 ###############
 
 
-#### Two arm
+#### Random intercepts
 outputMST <- mstFREQ(Posttest~ Intervention + Prettest, 
                      random = "School", intervention = "Intervention", data = mstData)
 plot(outputMST)
 
 
+#### Bootstrapped
 outputMSTBoot <- mstFREQ(Posttest~ Intervention + Prettest, 
                          random = "School", intervention = "Intervention", 
                          nBoot = 1000, data = mstData)
+
 plot(outputMSTBoot)
 plot(outputMSTBoot,group=1)
 
-
+#### Permutation
 outputMSTPerm <- mstFREQ(Posttest~ Intervention + Prettest, 
                          random = "School", intervention = "Intervention",
                          nPerm = 1000, data = mstData)
@@ -98,112 +85,51 @@ plot(outputMSTPerm)
 plot(outputMSTPerm,group=1)
 
 
+####################
+##### Bayesian #####
+####################
+
+
 outputMSTbayes <- mlmBayes(Posttest~ Intervention + Prettest, 
                            random = "School", intervention = "Intervention",
                            nSim = 10000, data = mstData)
+
+## Random intercepts
 plot(outputMSTbayes)
+
+## Probability of effect size greater than a precified threshold
 plot(outputMSTbayes,group=1)
-
-## comparing different results
-
-ComparePlot(eefAnalyticsList=list(outputSRT,outputSRTBoot,outputMST,outputMSTBoot,outputMSTbayes),
-            modelNames =c("ols", "olsBoot","MLM","MLMBoot","MLMBayes"),group=1)
-# ComparePlot(eefAnalyticsList=list(outputSRT,outputSRTBoot,outputMST,outputMSTBoot,outputMSTbayes),
-#             modelNames =c("ols", "olsBoot","MLM","MLMBoot","MLMBayes"))
-
-#####
-
-#### Three arm
-outputMST2 <- mstFREQ(Posttest~ Intervention2 + Prettest, random = "School", 
-                      intervention = "Intervention2", data = mstData)
-plot(outputMST2)
-
-
-outputMSTBoot2 <- mstFREQ(Posttest~ Intervention2 + Prettest, random = "School", 
-                          intervention = "Intervention2", nBoot = 1000, data = mstData)
-plot(outputMSTBoot2,group=1)
-plot(outputMSTBoot2,group=2)
-
-
-outputMSTPerm2 <- mstFREQ(Posttest~ Intervention2 + Prettest, random = "School", 
-                          intervention = "Intervention2", nPerm = 1000, data = mstData)
-plot(outputMSTPerm2,group=1)
-plot(outputMSTPerm2,group=2)
-
-
-outputMSTbayes2 <- mlmBayes(Posttest~ Intervention2 + Prettest, random = "School", 
-                            intervention = "Intervention2", nSim = 10000, data = mstData)
-plot(outputMSTbayes2)
-plot(outputMSTbayes2,group=1)
-plot(outputMSTbayes2,group=2)
-
-
-ComparePlot(eefAnalyticsList=
-              list(outputSRT2,outputSRTBoot2,outputMST2,outputMSTBoot2,outputMSTbayes2),
-            modelNames =c("ols", "olsBoot","MLM","MLMBoot","MLMBayes"),group=1)
-ComparePlot(eefAnalyticsList=
-              list(outputSRT2,outputSRTBoot2,outputMST2,outputMSTBoot2,outputMSTbayes2),
-            modelNames =c("ols", "olsBoot","MLM","MLMBoot","MLMBayes"),group=2)
-
-
 
 ###############
 ##### CRT #####
 ###############
 
-#### Two arm
+#### Random intercepts
 outputCRT <- crtFREQ(Posttest~ Intervention + Prettest, random = "School", 
                      intervention = "Intervention", data = crtData)
 plot(outputCRT)
 
 
+## Bootstrapped
 outputCRTBoot <- crtFREQ(Posttest~ Intervention + Prettest, random = "School", 
                          intervention = "Intervention", nBoot = 1000, data = crtData)
+
 plot(outputCRTBoot,group=1)
 
 
+##Permutation
 outputCRTPerm <- crtFREQ(Posttest~ Intervention + Prettest, random = "School", 
                          intervention = "Intervention", nPerm = 1000, data = crtData)
+
 plot(outputCRTPerm,group=1)
 
 
+## Bayesain
 outputCRTbayes <- mlmBayes(Posttest~ Intervention + Prettest, random = "School", 
                            intervention = "Intervention", nSim = 10000, data = crtData)
+
 plot(outputCRTbayes,group=1)
 
-
-ComparePlot(eefAnalyticsList=list(outputCRT,outputCRTBoot ,outputCRTbayes),
-            modelNames=c("Std Error","BootStrap","Bayesian"),group=1)
-
-
-
-#### Three arm
-outputCRT2 <- crtFREQ(Posttest~ Intervention2 + Prettest, random = "School", 
-                      intervention = "Intervention2", data = crtData)
-plot(outputCRT2)
-
-
-outputCRTBoot2 <- crtFREQ(Posttest~ Intervention2 + Prettest, random = "School", 
-                          intervention = "Intervention2", nBoot = 1000, data = crtData)
-plot(outputCRTBoot2,group=1)
-plot(outputCRTBoot2,group=2)
-
-
-outputCRTPerm2 <- crtFREQ(Posttest~ Intervention2 + Prettest, random = "School", 
-                          intervention = "Intervention2", nPerm = 1000, data = crtData)
-plot(outputCRTPerm2,group=1)
-plot(outputCRTPerm2,group=2)
-
-outputCRTbayes2 <- mlmBayes(Posttest~ Intervention2 + Prettest, random = "School", 
-                            intervention = "Intervention2", nSim = 10000, data = crtData)
-plot(outputCRTbayes2,group=1)
-plot(outputCRTbayes2,group=2)
-
-
-ComparePlot(eefAnalyticsList=list(outputCRT2,outputCRTBoot2 ,outputCRTbayes2),
-            modelNames=c("Std Error","BootStrap","Bayesian"),group=1)
-ComparePlot(eefAnalyticsList=list(outputCRT2,outputCRTBoot2 ,outputCRTbayes2),
-            modelNames=c("Std Error","BootStrap","Bayesian"),group=2)
 
 
 ################
@@ -214,7 +140,7 @@ outputSRTCace <- caceSRTBoot(Posttest~ Intervention + Prettest,
                              intervention = "Intervention",compliance="Percentage_Attendance",
                              nBoot=1000, data = mstData) 
 plot(outputSRTCace)
-plot(outputSRTCace,group=2)
+
 
 
 outputMSTCace <- caceMSTBoot(Posttest~ Intervention + Prettest,random="School",
@@ -227,8 +153,6 @@ outputCRTCace <- caceCRTBoot(Posttest~ Intervention + Prettest,random="School",
                              intervention = "Intervention",compliance="Percentage_Attendance",
                              nBoot=1000, data = crtData) 
 plot(outputCRTCace)
-
-
 }
 }
 

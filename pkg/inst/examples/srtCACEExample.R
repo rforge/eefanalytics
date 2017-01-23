@@ -1,7 +1,7 @@
 if(interactive()){
 
 data(mstData)
-############# SRT
+############# weighted ITT ####################################
 caceOutput3<- caceSRTBoot(Posttest~ Prettest+ Intervention,
 			intervention="Intervention",
 			compliance = "Percentage_Attendance",nBoot=1000,data=mstData)
@@ -14,6 +14,5 @@ Complier
 
 ### visualising CACE effect size
 
-plotObject(analyticObject=ccaceOutput3)
-
+plot(caceOutput3)
 }

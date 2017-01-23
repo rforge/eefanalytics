@@ -7,24 +7,24 @@
 mlmBayes(formula, random, intervention, nSim, data)
 }
 \arguments{
-\item{formula}{specifies the model to be analysed. It is of the form y ~ x1+x2+....}
+\item{formula}{the model to be analysed. It is of the form y ~ x1+x2+.... Where y is the outcome variable and Xs are the predictors.}
 
-\item{random}{a string variable specifying the "cluster variable"  as contained in the data.}
+\item{random}{a string variable specifying the "clustering variable" as contained in the data. See example below}
 
-\item{intervention}{a string variable specifying the intervention variable in the formula.}
+\item{intervention}{a string variable specifying the "intervention variable" as appeared in the formula. See example below}
 
-\item{nSim}{specifies the number of MCMC iterations. A minimum of 10,000 is recommended.}
+\item{nSim}{number of MCMC iterations. A minimum of 10,000 is recommended.}
 
-\item{data}{specifies a data frame to be analysed.}
+\item{data}{data frame containing the data to be analysed.}
 }
 \value{
 S3 object; a list consisting of
 \itemize{
-\item \code{Beta}. Parameter estimates from the linear model with associated confidence intervals.
-\item \code{ES}. A matrix of  Hedges' g based on within and total variances. It is based on standard errors (SE) if \code{nBoot=NULL}. Otherwise, it is non-parametric bootstrapped confidence intervals.
-\item \code{covParm}. Vector of variance decomposition into between-variance (Schools) and within-variance (Pupils).
-\item \code{SchEffects}. Estimated random intercepts for individual schools.
-\item \code{ProbES}. A maxtrix containing the probability of observing ES greater than a pre-specified value. First column is for within-variance, second for between-variance and the third for total-variance.
+\item \code{Beta}. Estimates and confidence intervals for preditors specified in the model.
+\item \code{ES}. Hedges' g effect size for the intervention(s). If nBoot is not specified, the confidence intervals are 95% CIs based on standard errors. If nBoot is specified, they are non-parametric bootstrapped confidence intervals.
+\item \code{covParm}. Vector of variance decomposition into between cluster variance (Schools) and within cluster variance (Pupils). It also contains the intral-cluster correlation (ICC).
+\item \code{SchEffects}. Random intercepts for clusters, e.g schools.
+\item \code{ProbES}. A maxtrix containing the probability of observing effect size greater than a pre-specified threshold. 
 }
 }
 \description{
@@ -57,14 +57,11 @@ covParm
 
 ### plot random effects for schools
 
-plotObject(analyticObject=output)
+plot(output)
 
 ### plot posterior probability of an effect size to be bigger than a pre-specified threshold
 
-plotObject(analyticObject=output,group=1)
-
+plot(output,group=1)
 }
-
-
 }
 

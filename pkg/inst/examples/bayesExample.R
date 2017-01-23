@@ -23,12 +23,9 @@ covParm
 
 ### plot random effects for schools
 
-plotObject(analyticObject=output)
+plot(output)
 
 ### plot posterior probability of an effect size to be bigger than a pre-specified threshold
 
-plotObject(analyticObject=output,group=1)
-
+plot(output,group=1)
 }
-
-

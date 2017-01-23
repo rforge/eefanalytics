@@ -5,10 +5,19 @@
 #' @export
 #' @param x an output object from the eefAnalytics package.
 #' @param group a value indicating which intervention to plot.   
-#' This must be not be greater than the number of intervention excluing the control group.
+#' This must not be greater than the number of intervention excluding the control group.
 #' For a two arm trial, the maximum value is 1 and a maximum value of 2 for three arm trial.
 #' @param ... arguments passed to \code{\link[graphics]{plot.default}}
-#' @details PUT IN MORE DETAILS WHICH PLOT IS GIVEN UNDER WHICH CONDITION (SRT,MST,...)
+#' @details Plot produces graphical visualisation depending on which model is fitted:
+#' \itemize{
+#' \item For \code{srtFREQ()}, plot can only be used when \code{nBoot} or \code{nPerm} is specified to visualise the distribution of boostrapped or permutated values. 
+#' \item For \code{crtFREQ()} or \code{mstFREQ}, plot shows the distribution of random intercepts when \code{group=NULL}. 
+#' It produces histogram of permutated or bootstrapped values when \code{group} is specified and either \code{nBoot} or \code{nPerm} is also specified. 
+#' \item For \code{mlmBayes()}, plot produces the distrbution of random intercepts when \code{group = NULL}. 
+#' It produces the probability of effect size to be greater than a pre-specified threshold when group is specified. 
+#' \item Lastly, plot produces forest plots to compare CACE estimated for different level of compliance when \code{caceSRTBoot()} or 
+#' \code{caceCRTBoot()} or \code{caceMSTBoot()} is used.
+#' } 
 #' @return Returns relevant plots for each model.
 #' @example inst/examples/plotExample.R
 plot.eefAnalytics <- function(x,group=NULL,...){
@@ -20,17 +29,19 @@ plot.eefAnalytics <- function(x,group=NULL,...){
 
 #' A plot function to compare diferent eefAnalytics S3 objects from the eefAnalytics package.
 #' 
-#' \code{ComparePlot} plots a forest plot comparing the different eefAnalytics results.
+#' @description A forest plot comparing the different eefAnalytics results.
 #' 
 #' @export
 #' @param eefAnalyticsList A list of eefAnalytics S3 objects from eefAnalytics package.
 #' @param group a value indicating which intervention to plot.   
-#' This must be not be greater than the number of intervention excluing the control group.
+#' This must be not be greater than the number of intervention excluding the control group.
 #' For a two arm trial, the maximum value is 1 and a maximum value of 2 for three arm trial.
-#' @param modelNames a string factor, which must be specified, containing the names of model to compare.
-#' @details MAYBE A BIT MORE DETAILS ABOUT WHAT INFORMATION CAN BE FOUND ON THE FOREST PLOT?
+#' @param modelNames a string factor containing the names of model to compare
+#' @details \code{ComparePlot} produces a forest plot compare the effect size and the associated confidence interval from the different model. 
+#' For multilevel model, it shows effect size based on residual variance and total variance.
+#' 
 #' @return Returns a forest plot to compare the different models
-#' @example inst/examples/plotExample.R
+#' @example inst/examples/compareExample.R
 ComparePlot <- function(eefAnalyticsList,group=NULL,modelNames=NULL){
   if(class(eefAnalyticsList)!="list"){stop("eefAnalyticsList is not a list.")}
   
@@ -65,6 +76,7 @@ plotObject <- function(analyticObject,group=NULL, compare=FALSE,modelNames=FALSE
       hist(tmp2,breaks=30,col="white",border="cornflowerblue",xlab="Bootstrap estimates",main="")
       abline(v=obs.est,col="red",lwd=2,lty=1)
       abline(v=0,col="grey48",lwd=2,lty=1)
+      legend("topright",c("Observed Estimate","Zero-Line"),col=c("red","grey48"),bty="n",lty=1,lwd=2)
       
     }
     
@@ -78,6 +90,8 @@ plotObject <- function(analyticObject,group=NULL, compare=FALSE,modelNames=FALSE
       hist(tmp2,breaks=30,col="white",border="cornflowerblue",xlab="Permutation values",main=paste("P(X|NULL)=",pvalue,sep=""))
       abline(v=obs.est,col="red",lwd=2,lty=2)
       abline(v=-obs.est,col="red",lwd=2,lty=2)
+      legend("topright",c("(-) Observed Estimate"),col=c("red"),bty="n",lty=2,lwd=2)
+      
     }
     
     
@@ -121,6 +135,7 @@ plotObject <- function(analyticObject,group=NULL, compare=FALSE,modelNames=FALSE
       hist(tmp2,breaks=30,col="white",border="cornflowerblue",xlab="Bootstrap estimates",main="")
       abline(v=obs.est,col="red",lwd=2,lty=1)
       abline(v=0,col="grey48",lwd=2,lty=1)
+      legend("topright",c("Observed Estimate","Zero-Line"),col=c("red","grey48"),bty="n",lty=1,lwd=2)
     }
     
     
@@ -133,6 +148,7 @@ plotObject <- function(analyticObject,group=NULL, compare=FALSE,modelNames=FALSE
       hist(tmp2,breaks=30,col="white",border="cornflowerblue",xlab="Permutation values",main=paste("P(X|NULL)=",pvalue,sep=""))
       abline(v=obs.est,col="red",lwd=2,lty=2)
       abline(v=-obs.est,col="red",lwd=2,lty=2)
+      legend("topright",c("(-) Observed Estimate"),col=c("red"),bty="n",lty=2,lwd=2)
     }
     
     

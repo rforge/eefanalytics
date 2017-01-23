@@ -1,6 +1,6 @@
 Package: eefAnalytics
-Version: 1.04
-Date: 2017-01-10
+Version: 1.05
+Date: 2017-01-23
 Title: Analytical Package for Analysing Education Trials
 Description: Provides tools for analysing education trials. Making different
     methods accessible in a single place is essential for sensitivity analysis
@@ -9,14 +9,6 @@ Description: Provides tools for analysing education trials. Making different
     trials.
 Author: Adetayo Kasim, ZhiMin Xiao, Steve Higgings and Ewoud De Troyer
 Maintainer: Adetayo kasim <a.s.kasim@durham.ac.uk>
-Depends:
-    R (>= 2.10)
-Imports:
-    geoR,
-    lme4,
-    mvtnorm,
-    metafor,
-    graphics,
-    stats
+Imports: geoR, lme4, mvtnorm, metafor, graphics, stats
 License: GPL-3
 RoxygenNote: 5.0.1
