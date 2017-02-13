@@ -34,11 +34,11 @@ plot.eefAnalytics <- function(x,group=NULL,...){
 #' @export
 #' @param eefAnalyticsList A list of eefAnalytics S3 objects from eefAnalytics package.
 #' @param group a value indicating which intervention to plot.   
-#' This must be not be greater than the number of intervention excluding the control group.
+#' This must not be greater than the number of intervention excluding the control group.
 #' For a two arm trial, the maximum value is 1 and a maximum value of 2 for three arm trial.
 #' @param modelNames a string factor containing the names of model to compare
-#' @details \code{ComparePlot} produces a forest plot compare the effect size and the associated confidence interval from the different model. 
-#' For multilevel model, it shows effect size based on residual variance and total variance.
+#' @details \code{ComparePlot} produces a forest plot which compares the effect size and the associated confidence interval from the different model. 
+#' For a multilevel model, it shows effect size based on residual variance and total variance.
 #' 
 #' @return Returns a forest plot to compare the different models
 #' @example inst/examples/compareExample.R

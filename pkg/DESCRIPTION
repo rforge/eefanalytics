@@ -1,6 +1,6 @@
 Package: eefAnalytics
-Version: 1.0.5
-Date: 2017-01-23
+Version: 1.0.6
+Date: 2017-02-13
 Title: Analytical Package for Analysing Education Trials
 Description: Provides tools for analysing education trials. Making different
     methods accessible in a single place is essential for sensitivity analysis

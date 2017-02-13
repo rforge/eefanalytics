@@ -10,7 +10,7 @@ ComparePlot(eefAnalyticsList, group = NULL, modelNames = NULL)
 \item{eefAnalyticsList}{A list of eefAnalytics S3 objects from eefAnalytics package.}
 
 \item{group}{a value indicating which intervention to plot.
-This must be not be greater than the number of intervention excluding the control group.
+This must not be greater than the number of intervention excluding the control group.
 For a two arm trial, the maximum value is 1 and a maximum value of 2 for three arm trial.}
 
 \item{modelNames}{a string factor containing the names of model to compare}
@@ -22,8 +22,8 @@ Returns a forest plot to compare the different models
 A forest plot comparing the different eefAnalytics results.
 }
 \details{
-\code{ComparePlot} produces a forest plot compare the effect size and the associated confidence interval from the different model. 
-For multilevel model, it shows effect size based on residual variance and total variance.
+\code{ComparePlot} produces a forest plot which compares the effect size and the associated confidence interval from the different model. 
+For a multilevel model, it shows effect size based on residual variance and total variance.
 }
 \examples{
 if(interactive()){
