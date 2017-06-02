@@ -429,103 +429,104 @@ mlmBayes.formula <- function(formula,random,intervention,nSim=nSim,data){
 ############# Bayesian functions ################################################
 
 ## Gibbs sampling - internal
+
 erantBAYES<- function(posttest,fixedDesignMatrix,intervention,cluster, nsim) {
-      
-	cluster <- as.factor(cluster)   
-	randomDesignMatrix <- as.matrix(as.data.frame(lm(posttest~cluster-1,x=TRUE)$x))
-	nschools <- ncol(randomDesignMatrix )
-	npar <- ncol(fixedDesignMatrix)
-	totalObservations <- nrow(randomDesignMatrix )
-	
-	lgrp <- nchar(paste(intervention))
-	sgrp <- substring(colnames(fixedDesignMatrix),1,lgrp)
-	ssgrp <- colnames(fixedDesignMatrix)[sgrp==intervention]
-	iindex <- which(sgrp==intervention)	
-
-	ncluster <- tapply(cluster,cluster,length)
-
-	###########
-  	# Initial values  #
-  	###########
-	beta <- summary(lm(posttest~fixedDesignMatrix))$coef[,1]
-	sigma2.ui <- 1
-	b <- rnorm(nschools,0,1)
-	bmat<-matrix(b,ncol=1,byrow=T)
-
-  	#################
-  	# Output matrix #
-  	#################
-
-  	nused <- floor(nsim/2)
-  	nburnin <-  nsim-nused
-  	outputbik <- matrix(0,nused,nschools)
-  	outputCov <- matrix(0,nused,4)
-      outputES <- matrix(0,nused,3*length(ssgrp) )
-      outputBeta <- matrix(0,nused,npar)
-
-	for (i in 1:nsim){
-
-    		set.seed(123*i+i)
-
-
-		# Update sigma2.e
-		
-		Ve <- totalObservations
-		s2e0 <- fixedDesignMatrix %*% t(t(beta))
-            s2e1 <-  t(matrix(bmat,nrow=nschools,ncol=totalObservations))
-   		s2e2 <- randomDesignMatrix*s2e1 
-           	s2e3 <- t(t(posttest))-s2e0 -rowSums(s2e2) 
-		s2e <- (t(s2e3)%*%s2e3)/Ve
-   		sigma2.e<-rinvchisq(1, Ve, s2e)
-
-
- 		# Update sigma2.ui
-		Vui <- nschools 
-		s2ui <- (t(bmat)%*%bmat)/Vui
-            sigma2.ui<-rinvchisq(1,Vui,s2ui)
-
-
- 		# Update b
-		usim1 <- t(t(posttest))-s2e0
-  		usim2<- tapply(usim1,cluster,mean)
-		uV0 <- (ncluster +  as.numeric(sigma2.e/sigma2.ui))^-1
-		uV <-  diag(as.numeric(sigma2.e)*uV0 )
-            ui <- ncluster*uV0*usim2
-   		b <-rmvnorm(1,ui,uV)
-   		bmat<-matrix(b,ncol=1,byrow=T)
-
-		# Update Beta 
-            beta1 <-solve(t(fixedDesignMatrix) %*% fixedDesignMatrix )
-		beta2 <-  t(matrix(bmat,nrow=nschools,ncol=totalObservations))
-   		beta3 <- randomDesignMatrix*beta2
-		beta4 <- t(t(posttest)) -rowSums(beta3)
-            beta5 <- t(fixedDesignMatrix)%*% beta4
-		beta6 <- beta1 %*% beta5 
-   		vbeta<- beta1*as.numeric(sigma2.e )
-   		beta<-c(rmvnorm(1,beta6,vbeta))
-            
-            treatment=beta[iindex]
-
-
-   		if(i > nburnin ){ 
-  			outputbik[(i-nburnin),] <- as.numeric(b)
-  			outputCov[(i-nburnin),] <- c(sigma2.e,sigma2.ui,sigma2.e+sigma2.ui,(sigma2.ui)/(sigma2.e+sigma2.ui))
-  			outputBeta[(i-nburnin),] <- as.numeric(beta)
-  			outputES[(i-nburnin),] <- c(sapply(treatment,function(x)x/sqrt(c(sigma2.e,(sigma2.ui),sigma2.e+sigma2.ui))))
-		}
-	}
-
-
-      esF <- c("Within","Between","Total")
-
-      es.names <- c(sapply(ssgrp,function(x)paste(x,esF,sep="") ))
-      colnames(outputBeta)<- colnames(fixedDesignMatrix)
-	colnames(outputCov) <- c("Within","Between","Total","ICC")
-	colnames(outputES) <- es.names
-	colnames(outputbik) <- unique(cluster )
-
- 	Output <- list(randomEffects=outputbik,CovParameters=outputCov,Beta=outputBeta,ES=outputES)
-  	return(Output)
+  
+  cluster <- as.factor(cluster)  
+  randomDesignMatrix <- as.matrix(as.data.frame(lm(posttest~cluster-1,x=TRUE)$x))
+  nschools <- ncol(randomDesignMatrix )
+  npar <- ncol(fixedDesignMatrix)
+  totalObservations <- nrow(randomDesignMatrix )
+  
+  lgrp <- nchar(paste(intervention))
+  sgrp <- substring(colnames(fixedDesignMatrix),1,lgrp)
+  ssgrp <- colnames(fixedDesignMatrix)[sgrp==intervention]
+  iindex <- which(sgrp==intervention)    
+  
+  ncluster <- tapply(cluster,cluster,length)
+  
+  ###########
+  # Initial values  #
+  ###########
+  beta <- summary(lm(posttest~fixedDesignMatrix))$coef[,1]
+  sigma2.ui <- 1
+  b <- rnorm(nschools,0,1)
+  bmat<-matrix(b,ncol=1,byrow=T)
+  
+  #################
+  # Output matrix #
+  #################
+  
+  nused <- floor(nsim/2)
+  nburnin <-  nsim-nused
+  outputbik <- matrix(0,nused,nschools)
+  outputCov <- matrix(0,nused,4)
+  outputES <- matrix(0,nused,3*length(ssgrp) )
+  outputBeta <- matrix(0,nused,npar)
+  
+  for (i in 1:nsim){
+    
+    set.seed(123*i+i)
+    
+    
+    # Update sigma2.e
+    
+    Ve <- totalObservations
+    s2e0 <- fixedDesignMatrix %*% t(t(beta))
+    s2e1 <-  t(matrix(bmat,nrow=nschools,ncol=totalObservations))
+    s2e2 <- randomDesignMatrix*s2e1
+    s2e3 <- t(t(posttest))-s2e0 -rowSums(s2e2)
+    s2e <- (t(s2e3)%*%s2e3)/Ve
+    sigma2.e<-rinvchisq(1, Ve, s2e)
+    
+    
+    # Update sigma2.ui
+    Vui <- nschools
+    s2ui <- (t(bmat)%*%bmat)/Vui
+    sigma2.ui<-rinvchisq(1,Vui,s2ui)
+    
+    
+    # Update b
+    usim1 <- t(t(posttest))-s2e0
+    usim2<- tapply(usim1,cluster,mean)
+    uV0 <- (as.numeric(sigma2.ui)^-1 +  ncluster/as.numeric(sigma2.e))^-1
+    uV <-  diag(uV0 )
+    ui <- uV0*as.numeric(sigma2.e)^-1*usim2
+    b <-rmvnorm(1,ui,uV)
+    bmat<-matrix(b,ncol=1,byrow=T)
+    
+    # Update Beta
+    beta1 <-solve(t(fixedDesignMatrix) %*% fixedDesignMatrix )
+    beta2 <-  t(matrix(bmat,nrow=nschools,ncol=totalObservations))
+    beta3 <- randomDesignMatrix*beta2
+    beta4 <- t(t(posttest)) -rowSums(beta3)
+    beta5 <- t(fixedDesignMatrix)%*% beta4
+    beta6 <- beta1 %*% beta5
+    vbeta<- beta1*as.numeric(sigma2.e )
+    beta<-c(rmvnorm(1,beta6,vbeta))
+    
+    treatment=beta[iindex]
+    
+    
+    if(i > nburnin ){
+      outputbik[(i-nburnin),] <- as.numeric(b)
+      outputCov[(i-nburnin),] <- c(sigma2.e,sigma2.ui,sigma2.e+sigma2.ui,(sigma2.ui)/(sigma2.e+sigma2.ui))
+      outputBeta[(i-nburnin),] <- as.numeric(beta)
+      outputES[(i-nburnin),] <- c(sapply(treatment,function(x)x/sqrt(c(sigma2.e,(sigma2.ui),sigma2.e+sigma2.ui))))
+    }
+  }
+  
+  
+  esF <- c("Within","Between","Total")
+  
+  es.names <- c(sapply(ssgrp,function(x)paste(x,esF,sep="") ))
+  colnames(outputBeta)<- colnames(fixedDesignMatrix)
+  colnames(outputCov) <- c("Within","Between","Total","ICC")
+  colnames(outputES) <- es.names
+  colnames(outputbik) <- unique(cluster )
+  
+  Output <- list(randomEffects=outputbik,CovParameters=outputCov,Beta=outputBeta,ES=outputES)
+  return(Output)
 }
 
 
